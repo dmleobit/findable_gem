@@ -1,7 +1,9 @@
 # frozen_string_literal: true
+require 'findable/finder'
+
 
 module Findable
-  class Definition < ApplicationService
+  class Definition
     ONLY_KEYWORD   = 'only'
     EXCEPT_KEYWORD = 'except'
 
@@ -19,9 +21,9 @@ module Findable
       this = self
 
       controller.define_method(finder_name) do
-        resource = ::Findable::Finder.call(controller: self,
-                                           resource_name: this.resource_name,
-                                           **this.params)
+        resource = ::Findable::Finder.new(controller: self,
+                                          resource_name: this.resource_name,
+                                          **this.params).call
         instance_variable_set("@#{this.resource_name}", resource)
       end
 

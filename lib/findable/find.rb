@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
+require 'findable/strategies/friendly_id'
+
 module Findable
-  class Find < ApplicationService
+  class Find
     include Strategies::FriendlyId
 
     def initialize(resource_class:, **params)

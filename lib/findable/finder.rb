@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
+require 'findable/find'
+
 module Findable
-  class Finder < ApplicationService
-    delegate :params, to: :controller
+  class Finder
 
     def initialize(controller:, resource_name:, **params)
       @controller = controller
@@ -49,7 +50,7 @@ module Findable
     end
 
     def resource
-      ::Findable::Find.call(
+      ::Findable::Find.new(
         resource_class: resource_class,
         value: value,
         attribute: attribute,
@@ -58,11 +59,11 @@ module Findable
         preload: preload,
         joins: joins,
         friendly: friendly
-      )
+      ).call
     end
 
     def value
-      params.dig(*by) || fallback(fallback_value_parameter)
+      controller.params.dig(*by) || fallback(fallback_value_parameter)
     end
 
     def fallback(parameter)
